@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Library Model</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  		<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+		<style></style>
+	</head>
+	<body>
+		<h1> Library Model </h1>
+		<script>
+
+			var library = {			
+			};
+
+			library.report = function () {
+				console.log("Books in Fiction A-M:");
+				fictionA_M.report();
+				console.log("Books in Fiction N-Z:");
+				fictionN_Z.report();
+				console.log("Books in Non-Fiction A-M:");
+				nonfictA_M.report();
+				console.log("Books in Non-Fiction N-Z:");
+				nonfictN_Z.report();
+			};
+
+			function Shelf(shelfname) {
+			this.shelfname = shelfname;
+			this.books = [];
+			this.report = function() {
+				if(!this.books[0]) {
+					console.log("No books on this shelf.");
+				} else {
+					var numberOfBooks = this.books.length;
+					this.books.sort();
+					for(var i = 0; i<numberOfBooks; i++) {
+						console.log(this.books[i]);
+						}
+					}
+				}
+			this.unshelf = function (shelfEntry) {
+				var numberOfBooks = this.books.length;
+					for(var i = 0; i<numberOfBooks; i++) {
+						if (this.books[i] === shelfEntry) {
+							var index = this.books[i];
+							this.books.splice(index, 1);
+						}
+					}
+				}
+			}
+
+			var fictionA_M = new Shelf("Fiction A - M");
+			var fictionN_Z = new Shelf("Fiction N - Z");
+			var nonfictA_M = new Shelf("Non-fiction A - M");
+			var nonfictN_Z = new Shelf("Non-fiction N - Z");
+
+			function Book(title, author, year, genre) {
+				this.title = title;
+				this.author = author;
+				this.year = year;
+				this.genre = genre;
+				this.shelfname = "Unshelved / Checked Out";
+
+				this.enshelf = function() {
+					var correctShelf;
+					if (this.shelfname === "Unshelved / Checked Out") {
+						switch(this.genre) {
+							case "Fiction":
+								if(this.author < "N") {
+									this.shelfname = "Fiction A - M";
+									fictionA_M.books.push(this.author + ", " + this.title);
+									alert(this.title + " is now shelved in Fiction A - M.");
+								}
+								else {
+									this.shelfname = "Fiction N - Z";
+									fictionN_Z.books.push(this.author + ", " + this.title);
+									alert(this.title + " is now shelved in Fiction N - Z.");
+								};
+								break;
+							case "Non-fiction":
+								if(this.author < "N") {
+									this.shelfname = "Non-fiction A - M";
+									nonfictA_M.books.push(this.author + ", " + this.title);
+									alert(this.title + " is now shelved in Non-fiction A - M.");
+								}
+								else {
+									this.shelfname = "Non-fiction N - Z";
+									nonfictN_Z.books.push(this.author + ", " + this.title);
+									alert(this.title + " is now shelved in Non-fiction N - Z.");
+								};
+								break;
+							default:
+								alert("We can't shelf this book unless we know its genre.");
+								break;
+						}
+					} else {
+						alert("This book is already shelved.");
+					}
+				};
+					this.unshelf = function() {
+
+						var shelfEntry = this.author + ", " + this.title;
+						fictionA_M.unshelf(shelfEntry);
+						fictionN_Z.unshelf(shelfEntry);
+						nonfictA_M.unshelf(shelfEntry);
+						nonfictN_Z.unshelf(shelfEntry);
+
+						this.shelfname = "Unshelved / Checked Out";
+				};
+			}
+
+			var theHobbit = new Book("The Hobbit", "Tolkien", "1937", "Fiction");
+			var theTwoTowers = new Book("The Two Towers", "Tolkien", "1954", "Fiction");
+			var theFellowshipoftheRing = new Book("The Fellowship of the Ring", "Tolkien", "1955", "Fiction");
+			var surelyYoureJokingMrFeynman = new Book ("Surely You're Joking, Mr. Feynman", "Feynman", "1985", "Non-fiction");
+			var crimeandPunishment = new Book ("Crime and Punishment", "Dostoyevsky", "1866", "Fiction");
+			var aPeoplesHistoryoftheUS = new Book ("A People's History of the United States", "Zinn", "2005", "Non-fiction");
+
+		</script>
+	</body>
+</html>
